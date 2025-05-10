@@ -1,36 +1,16 @@
-const dotenv = require('dotenv');
-dotenv.config();
 const mongoose = require('mongoose');
+const winston = require("winston");
 
-const mongoClient = require('mongodb').MongoClient;
+const connectDB = async () => {
 
-let database;
-
-const initDb = (callback) => {
-    if(database){
-        console.log('Db is already initialized');
-        return callback(null, database);
+    try {
+        await mongoose.connect(process.env.MONGODB_URI);
+        winston.info('MongoDB Connected')
+    } catch (error){
+        winston.error(`MongoDB connection error: ${error.message}`);
+    throw error;
     }
-    mongoClient.connect(process.env.MONGODB_URI)
-        .then((client) => {
-            database = client;
-            callback(null, database);
-        })
-        .catch((err) => {
-            callback(err);
-        })
 };
 
 
-const getDatabase = () => {
-    if(!database){
-        throw Error('Database not Initialized');
-    }
-    return database;
-}
-
-
-module.exports = {
-    initDb,
-    getDatabase
-};
+module.exports = connectDB;

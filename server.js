@@ -1,14 +1,53 @@
+require('dotenv').config();
 const express = require('express');
-const app = express();
-const mongodb = require('./db/db');
-const port = process.env.PORT || 3000;
+const cors = require('cors');
+const morgan = require('morgan')
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocs = require('./swagger/swaggerDocs');
+const winston = require('./utils/logger');
 
+const connectDB = require('./db/db');
+const errorHandler = require('./middleware/errorHandler');
+
+const app = express();
+
+// Middlewares
+
+// Helmet helps us secure the app by setting HTTP headers
+app.use(helmet());
+
+// Cors enables cross-origin requests
+app.use(cors());
+
+// Parses incoming JSON request and puts the parsed data in req.body
+app.use(express.json());
+
+// HTTP request logger using winston stream.
+app.use(morgan('combined', { stream: winston.stream}))
+
+// Limits repeated requests to public APIs and/or endpoints.
+app.use(rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100
+}));
+
+// Swagger docs served at /api-docs
+app.use('/api-docs', swaggerUi.serve)
+app.use('/api-docs', swaggerUi.setup(swaggerDocs));
+app.use(express.urlencoded());
 app.use('/', require('./routes'));
 
-mongodb.initDb( (err) => {
-    if(err){
-        console.log(err);
-    }else {
-        app.listen(port, () => {console.log(`Database is listening and Node Running port on ${port}`)});
+app.use(errorHandler);
+// Connect to MongoDB
+(async function startServer() {
+    try {
+        await connectDB();
+        const PORT = process.env.PORT || 8080;
+        app.listen(PORT, () => winston.info(`Server running at http://localhost:${PORT}`));
+    } catch (error) {
+        winston.error(`Failed to start server: ${error.message}`);
+        process.exit(1);
     }
-});
+})();
