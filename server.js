@@ -10,7 +10,7 @@ const winston = require('./utils/logger');
 
 const connectDB = require('./db/db');
 const errorHandler = require('./middleware/errorHandler');
-
+const mainRoutes = require('./routes/index')
 const app = express();
 
 // Middlewares
@@ -37,7 +37,7 @@ app.use(rateLimit({
 app.use('/api-docs', swaggerUi.serve)
 app.use('/api-docs', swaggerUi.setup(swaggerDocs));
 app.use(express.urlencoded());
-app.use('/', require('./routes'));
+app.use('/api', mainRoutes);
 
 app.use(errorHandler);
 // Connect to MongoDB
