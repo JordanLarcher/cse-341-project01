@@ -1,0 +1,9 @@
+[{"_id":"681fba7fba1a2a7da551bd66",
+  "firstName":"jordan",
+  "lastName":"larcher",
+  "email":"jlarcher@byupathway.edu",
+  "favoriteColor":"black",
+  "birthday":"12-08-1996"
+}]
+
+
