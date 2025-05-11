@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const {validationResult} = require('express-validator');
-const userController = require('../controllers/userController');
-const {userValidationRules} = require('../middleware/validators/userValidators');
+const contactController = require('../controllers/contactController');
+const {contactValidationRules} = require('../middleware/validators/contactValidators');
 
 
 
@@ -15,13 +15,13 @@ const {userValidationRules} = require('../middleware/validators/userValidators')
  *       200:
  *         description: List of users
  */
-router.get('/', userController.getAllUsers);
+router.get('/', contactController.getAllContacts);
 
 /**
  * @swagger
  * /users/{id}:
  *   get:
- *     summary: Get user by ID
+ *     summary: Get contact by ID
  *     parameters:
  *       - in: path
  *         name: id
@@ -30,28 +30,28 @@ router.get('/', userController.getAllUsers);
  *           type: string
  *     responses:
  *       200:
- *         description: User object
+ *         description: Contact object
  *       404:
- *         description: User not found
+ *         description: Contact not found
  */
-router.get('/:id', userController.getUserById)
+router.get('/:id', contactController.getContactById)
 
 
-router.post('/', userValidationRules, (req, res, next) => {
+router.post('/', contactValidationRules, (req, res, next) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()) return res.status(400).json({errors: errors.array()});
-    userController.createUser(req, res, next);
+    contactController.createContact(req, res, next);
 });
 
 
 
-router.put('/:id', userValidationRules, (req, res, next) => {
+router.put('/:id', contactValidationRules, (req, res, next) => {
    const errors = validationResult(req);
    if(!errors.isEmpty()) return res.status(400).json({ errors: errors.array()});
-   userController.updateUser(req, res, next);
+    contactController.updateContact(req, res, next);
 });
 
 
-router.delete('/:id', userController.deleteUser);
+router.delete('/:id', contactController.deleteContact);
 
 module.exports = router;
