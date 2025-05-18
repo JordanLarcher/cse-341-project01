@@ -51,12 +51,14 @@ router.get('/:id', contactController.getContactById)
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               firstName:
+ *                 type: string
+ *               lastName:
  *                 type: string
  *               email:
  *                 type: string
- *               phone:
- *                 type: string
+ *               birthday:
+ *                  type: string
  *     responses:
  *       201:
  *         description: Contact created successfully
@@ -94,12 +96,14 @@ router.post('/', contactValidationRules, (req, res, next) => {
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               firstName:
+ *                 type: string
+ *               lastName:
  *                 type: string
  *               email:
  *                 type: string
- *               phone:
- *                 type: string
+ *               birthday:
+ *                  type: string
  *     responses:
  *       200:
  *         description: Contact updated successfully

@@ -7,3 +7,12 @@
 }]
 
 
+Create a contact
+{
+  "firstName":"jordan",
+  "lastName":"larcher",
+  "email":"jlarcher@byupathway.edu",
+  "favoriteColor":"black",
+  "birthday":"12-08-1996"
+}
+

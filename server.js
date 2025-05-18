@@ -10,7 +10,7 @@ const winston = require('./utils/logger');
 
 const connectDB = require('./db/db');
 const errorHandler = require('./middleware/errorHandler');
-const mainRoutes = require('./routes/index')
+const mainRoutes = require('./routes/index');
 const app = express();
 
 // Middlewares
